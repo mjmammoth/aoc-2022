@@ -3,6 +3,7 @@ from itertools import chain, product, count as count_from
 
 
 # Most of this is shamelessly stolen from Peter Norvig.
+# Which I entirely stole from https://github.com/narimiran/AdventOfCode2021
 
 cat = ''.join
 inf = float('inf')
