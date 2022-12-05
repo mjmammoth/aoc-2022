@@ -1,5 +1,4 @@
 import re 
-import numpy as np
 array2D = []
 array2DPart2 = []
 
