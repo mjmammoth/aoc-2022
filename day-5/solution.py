@@ -1,5 +1,7 @@
 import re 
+import numpy as np
 array2D = []
+array2DPart2 = []
 
 with open("day-5/input.txt") as f:
     linesArray = f.read().split("\n")
@@ -13,6 +15,7 @@ with open("day-5/input.txt") as f:
         if re.match('\s+\d\s+\d', line):
             for stack in re.findall('\d', line):
                 array2D.append([])
+                array2DPart2.append([])
             matrixHeader = count
             prepopulatedValues = linesArray[:matrixHeader]
             break
@@ -26,8 +29,7 @@ with open("day-5/input.txt") as f:
                 else:
                     arrayIndex = int((i - 1)/4)
                 array2D[arrayIndex].append(valueLine[i])
-
-    array2DPart2 = array2D
+                array2DPart2[arrayIndex].append(valueLine[i])
 
     for instruction in linesArray[matrixHeader+2:]:
         instructionInts = re.split(' ', instruction)
@@ -36,12 +38,12 @@ with open("day-5/input.txt") as f:
         countIndex = int(instructionInts[1])
 
         for i in range(countIndex):
+            #array2D[toIndex].append(arrayIndex[fromIndex].pop())
             array2D[toIndex].append(array2D[fromIndex].pop())
-        
+
         for i in array2DPart2[fromIndex][-countIndex:]:
             array2DPart2[toIndex].append(i)
             array2DPart2[fromIndex].pop()
-
 
 part1 = ''
 for i in array2D:
