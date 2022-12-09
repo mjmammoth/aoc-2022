@@ -25,8 +25,7 @@ with open("day-7/input.txt") as f:
                     adict[context] = linesArray[beginIndex+2:index]
             beginIndex = index
             context = getContext(context, line)
-            #print(line)
-            #print(context)
+
     adict[context] = linesArray[beginIndex+2:]
 
 
@@ -40,7 +39,7 @@ for directory in adict:
             sumOfDirectory += int(ls.split(' ')[0])
         except:
             #do nothing
-            print('')
+            nothing = 0
 
     filesize[directory] = sumOfDirectory
 
@@ -50,12 +49,10 @@ for directory in filesize:
     directorySize[directory] = filesize[directory]
 
     folderIndices = find(directory, '/')
-    print(folderIndices)
     if len(folderIndices) > 1:
         for parent in folderIndices[:-1]:
             tempParent = directory[0:parent+1]
             directorySize[tempParent] += filesize[directory]
-print(directorySize)
 
 part1 = 0
 for recursiveSize in directorySize:
