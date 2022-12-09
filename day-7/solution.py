@@ -67,13 +67,11 @@ for recursiveSize in directorySize:
 unusedDiskSpace = 70000000 - directorySize['/']
 diskSpaceRequired = 30000000 - unusedDiskSpace
 
-potentialCandidates = []
+part2 = 70000000
 for directory in directorySize:
     if directorySize[directory] > diskSpaceRequired:
-        potentialCandidates.append(directorySize[directory])
-
-potentialCandidates.sort()
-part2 = potentialCandidates[0]
+        if directorySize[directory] < part2:
+            part2 = directorySize[directory]
 
 print(f"Part 1: {part1}")
 print(f"Part 2: {part2}")
