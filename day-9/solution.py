@@ -1,4 +1,4 @@
-def shouldTailMove(tailPos, headPos):
+def shouldSegmentMove(tailPos, headPos):
     noNeedToMovePositions = set()
     tailX = tailPos[0]
     tailY = tailPos[1]
@@ -10,45 +10,76 @@ def shouldTailMove(tailPos, headPos):
     headPos = f"{headPos[0]}:{headPos[1]}"
     return not headPos in noNeedToMovePositions
 
-def moveTail(tailPos, headPos, direction):
+def moveTail(t, h):
+    if t[0] < h[0]-1:
+        if t[1] == h[1]:
+            t[0] += 1
+        elif t[1] > h[1]:
+            t[0] += 1
+            t[1] -= 1
+        elif t[1] < h[1]:
+            t[0] += 1
+            t[1] += 1
+    elif t[0] > h[0]+1:
+        if t[1] == h[1]:
+            t[0] -= 1
+        elif t[1] > h[1]:
+            t[0] -= 1
+            t[1] -= 1
+        elif t[1] < h[1]:
+            t[0] -= 1
+            t[1] += 1
+    elif t[1] < h[1]-1:
+        if t[0] == h[0]:
+            t[1] += 1
+        elif t[0] < h[0]:
+            t[0] += 1
+            t[1] += 1
+        elif t[0] > h[0]:
+            t[0] -= 1
+            t[1] += 1
+    elif t[1] > h[1]+1:
+        if t[0] == h[0]:
+            t[1] -= 1
+        elif t[0] < h[0]:
+            t[0] += 1
+            t[1] -= 1
+        elif t[0] > h[0]:
+            t[0] -= 1
+            t[1] -= 1
+
+def moveHead(headPos, direction):
     match direction:
-        case 'R':
-            tailPos[0] += 1
-            if tailPos[1] != headPos[1]: tailPos[1] = headPos[1]
-        case 'L':
-            tailPos[0] -= 1
-            if tailPos[1] != headPos[1]: tailPos[1] = headPos[1]
-        case 'U':
-            tailPos[1] += 1
-            if tailPos[0] != headPos[0]: tailPos[0] = headPos[0]
-        case 'D':
-            tailPos[1] -= 1
-            if tailPos[0] != headPos[0]: tailPos[0] = headPos[0]
-    tailUniquePositions.add(f'{tailPos[0]}:{tailPos[1]}')
-    return tailPos
+        case 'R': headPos[0] += 1
+        case 'L': headPos[0] -= 1
+        case 'U': headPos[1] += 1
+        case 'D': headPos[1] -= 1    
+    return headPos
 
-
-def moveHead(tailPos, headPos, direction, amount):
-    for i in range(amount):
-        match direction:
-            case 'R': headPos[0] += 1
-            case 'L': headPos[0] -= 1
-            case 'U': headPos[1] += 1
-            case 'D': headPos[1] -= 1
-        if shouldTailMove(tailPos, headPos):
-            tailPos = moveTail(tailPos, headPos, direction)
-    return tailPos, headPos
-
-tailUniquePositions = {'0:0'}
+segment2UniquePositions = {'0:0'}
+segment10UniquePositions = {'0:0'}
 with open("day-9/input.txt") as f:
     linesArray = f.read().split("\n")
-    tailPos = [0, 0]
-    headPos = [0, 0]
+    ropeSegments = [[0, 0] for i in range(10)]
     
     for instruction in linesArray:
         instruction = instruction.split(' ')
-        tailPos, headPos = moveHead(tailPos, headPos, instruction[0], int(instruction[1]))
+        direction = instruction[0]
+        amountToMove = int(instruction[1])
         
-print(len(tailUniquePositions))
+        for i in range(amountToMove):
+            headPos = ropeSegments[0]
+            headPos = moveHead(headPos, direction)
+            for x, segment in enumerate(ropeSegments[1:]):
+                headPos = ropeSegments[x]
+                if shouldSegmentMove(segment, headPos):
+                    moveTail(segment, headPos)
+                    if x+1 == 1: segment2UniquePositions.add(f'{ropeSegments[x+1][0]}:{ropeSegments[x+1][1]}')
+                    if x+1 == 9: segment10UniquePositions.add(f'{ropeSegments[x+1][0]}:{ropeSegments[x+1][1]}')
+                else: break
+        
+print(f"Part 1: {len(segment2UniquePositions)}")
+print(f"Part 2: {len(segment10UniquePositions)}")
+
 
     
